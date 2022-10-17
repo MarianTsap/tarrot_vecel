@@ -1,0 +1,38 @@
+{% extends "cards/base.html" %}
+{% load static %}
+{% block content %}
+    {% csrf_token %}
+    
+    <h1>Hello, Tarrot!</h1>
+    <h3>{{ moon_cycle_name }}</h3>
+    <div class="container">
+        <button onclick="shuffle_cards()" class="button" type="button" id="shuffle_cards">Shuffle the cards!<br><small>перемішати та роздати колоду</small></button> 
+    </div>
+    <div id="sequence_number" style="display:none;"></div>
+    <div  class="container">
+        <h2 class="message" id="message"></h2>
+    <img src="{% static 'media/' %}cards/title_sel.jpg" style="display:none;"  src="" class='img-card' alt="..." >
+    </div>
+    {% if cards_list %}
+        <div class="container" id="display">
+        {% for card in cards_list %}
+            <!-- <img style="display:none;"  src="{% static 'media/' %}{{ card.card }}" class='img-card'  id="{{ card.card }}" alt="..." > -->
+            <img onclick="reply_click(this.id)" src="{% static 'media/' %}cards/title.jpg" style="display:none;"  src="" class='img-card'  id="{{ card.card }}" alt="..." >
+        {% endfor %}
+        </div>
+    {% else %}
+        <p>No cards are available.</p>
+    {% endif %}
+    <div id="div_meaning" class="container">
+    <br>
+    <br>
+    </div>
+    <div class="container">
+    <p id="source">Excerpts from The Pictorial Key to the Tarot By Arthur Edward Waite Illustrations By Pamela Colman Smith. [1911]</p>
+    <p id="reference">Довідка:<br>
+    Карти Таро — це колода із 78 карт, що з'явилася у Середньовіччі, і використовується в наші дні, переважно, для ворожіння. <br>
+    Карти Таро є системою графічних образів, які можуть бути оформлені як колода карт. <br>
+    Карти Таро використовуються для гри або ворожіння, а також можуть бути просто набором графічних образів (або навіть словесних описів образів), коли вони використовуються як символи.
+    </p>
+    </div>
+{% endblock %}

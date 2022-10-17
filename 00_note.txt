@@ -1,0 +1,15 @@
+https://www.sacred-texts.com/tarot/pkt/index.htm
+
+django-admin startproject tarrot    #start project
+python manage.py startapp cards     #start app
+python manage.py runserver          #runserver
+python manage.py makemigrations     # prepare migrations makemigrations
+python manage.py migrate            # migrate
+python manage.py sqlmigrate cards 0001      # display SQL command to create table
+python manage.py createsuperuser    # create user: marian  password: msoo951
+
+
+git clone https://github.com/MarianTsap/tarrot.git
+git add -A
+git commit -m "test"
+git push

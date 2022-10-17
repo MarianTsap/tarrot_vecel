@@ -1,0 +1,33 @@
+conda create -n py39 python=3.9
+
+
+
+git clone https://github.com/MarianTsap/septima_heroku.git
+git add -A
+git commit -m "test"
+git push
+
+
+https://www.geeksforgeeks.org/how-to-deploy-django-application-on-heroku/
+
+
+pip install dj-database-url gunicorn whitenoise
+pip install psycopg2
+
+pip install Django
+pip install Pillow
+pip install Django-Heroku
+
+
+pip install Django
+pip install Pillow
+pip install Django-Heroku
+pip install gunicorn
+pip install whitenoise
+
+
+python manage.py collectstatic
+
+pip freeze > requirements.txt
+
+python manage.py runserver
