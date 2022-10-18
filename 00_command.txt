@@ -1,3 +1,6 @@
+https://www.devmaesters.com/blog/15
+
+
 conda create -n py39 python=3.9
 
 
