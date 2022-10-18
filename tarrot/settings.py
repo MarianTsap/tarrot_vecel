@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-)j6avf2809d7x430e_q)!7kqzz)$&u$=y!slc4g_60o%_i#xd(
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['.vercel.app','*']
+ALLOWED_HOSTS = ['.vercel.app', '.now.sh','*']
 
 
 # Application definition
@@ -76,10 +76,10 @@ WSGI_APPLICATION = 'tarrot.wsgi.application'
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
+    #'default': {
+    #    'ENGINE': 'django.db.backends.sqlite3',
+    #    'NAME': BASE_DIR / 'db.sqlite3',
+    #}
 }
 
 
@@ -121,7 +121,7 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [os.path.join(BASE_DIR,'static'),    ]
-STATIC_ROOT = os.path.join(BASE_DIR,'staticfiles')
+STATIC_ROOT = os.path.join(BASE_DIR,'staticfiles_build', 'static')
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT =os.path.join(BASE_DIR,'static','media')
