@@ -1,36 +1,22 @@
-https://www.devmaesters.com/blog/15
+1. create venv
+python -m venv env
+env\Scripts\activate.bat
+pip install -r requirements.txt
+
+2. How to Start Django Project with a Database(PostgreSQL) https://stackpython.medium.com/how-to-start-django-project-with-a-database-postgresql-aaa1d74659d8
 
 
-conda create -n py39 python=3.9
+3. Deploy to vercel https://www.devmaesters.com/blog/15
 
 
-
+4. Git
 git clone https://github.com/MarianTsap/septima_heroku.git
 git add -A
 git commit -m "test"
 git push
 
 
-https://www.geeksforgeeks.org/how-to-deploy-django-application-on-heroku/
-
-
-pip install dj-database-url gunicorn whitenoise
-pip install psycopg2
-
-pip install Django
-pip install Pillow
-pip install Django-Heroku
-
-
-pip install Django
-pip install Pillow
-pip install Django-Heroku
-pip install gunicorn
-pip install whitenoise
-
-
+5. 
 python manage.py collectstatic
-
 pip freeze > requirements.txt
-
 python manage.py runserver
