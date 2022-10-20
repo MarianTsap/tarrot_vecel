@@ -2,6 +2,7 @@
 python -m venv env
 env\Scripts\activate.bat
 pip install fastapi uvicorn sqlalchemy psycopg2-binary
+python -m ensurepip --upgrade
 pip freeze > requirements.txt
 pip install -r requirements.txt
 
