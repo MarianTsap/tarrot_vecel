@@ -89,10 +89,10 @@ DATABASES = {
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'tarrot',
-        'USER': 'postgres',
-        'PASSWORD': 'msoo951',
-        'HOST': 'localhost',
+        'NAME': 'dpzmihkn',
+        'USER': 'dpzmihkn',
+        'PASSWORD': '0K9sKINCNsoI37cY0LDwBi9MiMj4fRjN',
+        'HOST': 'mouse.db.elephantsql.com',
         'PORT': 5432,
     }
 }

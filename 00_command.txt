@@ -1,9 +1,12 @@
 1. create venv
 python -m venv env
 env\Scripts\activate.bat
+pip install fastapi uvicorn sqlalchemy psycopg2-binary
+pip freeze > requirements.txt
 pip install -r requirements.txt
 
 2. How to Start Django Project with a Database(PostgreSQL) https://stackpython.medium.com/how-to-start-django-project-with-a-database-postgresql-aaa1d74659d8
+pip install psycopg2
 
 
 3. Deploy to vercel https://www.devmaesters.com/blog/15
@@ -20,3 +23,20 @@ git push
 python manage.py collectstatic
 pip freeze > requirements.txt
 python manage.py runserver
+
+6. python manage.py createsuperuser    tsapm msoo951
+
+
+7. Seect all table from postgres
+SELECT table_name
+FROM information_schema.tables
+WHERE table_schema = 'public'
+ORDER BY table_name;
+
+8. free postgres database
+https://www.elephantsql.com/docs/python.html
+dejurelv@gmail.com
+
+
+python manage.py migrate
+python manage.py makemigrations
