@@ -1,170 +1,62 @@
-# -*- coding: utf-8 -*-
 #%%
-# calculate moon day
-# https://www.subsystems.us/uploads/9/8/9/4/98948044/moonphase.pdf
-#https://minkukel.com/en/various/calculating-moon-phase/
-def moon_cycle_name():
-    import datetime
-    import math
-    meaning_moon_cycle = {'New':(0,1),'Waxing Crescent':(1,6.38264692644001),'First Quarter':(6.38264692644001,8.38264692644),'Waxing Gibbous':(8.38264692644,13.76529385288),'Full':(13.76529385288,15.76529385288),'Waning Gibbous':(15.76529385288,21.14794077932),'Last Quarter':(21.14794077932,23.14794077932),'Waning Crescent':(23.14794077932,28.53058770576)}
-    x = datetime.datetime.utcnow()
-    New_moon = datetime.datetime(2000, 1, 6, 18,14)
-    const = 29.53058770576
-    moon_cicles = (x-New_moon)
-    moon_cicles = float((moon_cicles.days+moon_cicles.seconds/3600/24))/const
-    #moon_day = ((int(moon_days.days)+float(x.hour/24))%1)*const
-    moon_day = moon_cicles%1*const
- 
-  
-    
-    Y = x.year
-    M = x.month
-    D = x.day
-    if M == 1 or M == 2:
-        Y = Y - 1
-        M = M + 12
-    A = math.floor(Y/100)
-    B = math.floor(A/4)
-    C = 2 - A + B
-    E = math.floor(365.25 * (Y+4716))
-    F = math.floor(30.6001 * (M+1))
-    JD = C + D + E + F - 1524.5 
-    Day_since_New = JD - 2451549.5
-    New_Moons = Day_since_New / 29.53058770576
+# Haversine formula
+from math import asin, sqrt, sin, cos, radians
 
-    Days_into_cycle = round((New_Moons % 1)*29.53058770576,2)
-    for item in meaning_moon_cycle:
-        if Days_into_cycle >= meaning_moon_cycle[item][0] and Days_into_cycle <= meaning_moon_cycle[item][1]:
-            moon_cycle_name = item
-    return (f"The Moon Phase - {moon_cycle_name} ({Days_into_cycle} - moon day into cycle)")
+object_lat = 49.82587
+object_lon = 23.95795
+lat = 49.82403251406
+lon = 23.9536850420042
 
-print(moon_cycle_name())
+
+distance = 2 * 6371 * asin(sqrt(sin((radians(lat) - radians(object_lat)) / 2) ** 2 + cos(radians(lat)) * cos(radians(object_lat)) * sin((radians(lon) - radians(object_lon)) / 2) ** 2));
+
+print(distance)
 
 
 
 #%%
-#return list of file name in dictionary
-def list_file_dir():
-    import os
-    #base_dir = os.path.dirname(os.path.realpath(__file__))
-    #files_dir = os.path.join(base_dir,'static','media','cards')
-    files_dir = 'e:/install/python/tarrot/static/media/cards/'
-    list_file=[]
-    for filename in os.listdir(files_dir):
-        list_file.append(filename)
-        #print(filename)
-    return list_file
+# work with list
+def Convert(tup, di):
+    di = dict(tup)
+    return di
 
+def Convert_1(tup, di):
+    for a, b in tup:
+        di.setdefault(a, 1)
+    return di
 
-print(f"Number elements is - {len(list_file_dir())}")
-print(list_file_dir())
+choise_1 = [('Прибудинкова територія','Прибудинкова територія'),('Зелене оточення','Зелене оточення'),('Шум загазованість','Шум загазованість'),('Виробнича зона','Виробнича зона')]
+choise_2 = [('Стан будинку відповідає його віку','Стан будинку відповідає його віку'),('Значні тріщини в стінах, сирість, руйнування даху','Значні тріщини в стінах, сирість, руйнування даху'),('Волосяні тріщини, відпадання штукатурки фасаду, протікання даху','Волосяні тріщини, відпадання штукатурки фасаду, протікання даху'),('Стан будинку відповідає його віку','Стан будинку відповідає його віку'),('Проведено капітальний ремонт','Проведено капітальний ремонт'),('Проведено капітальний ремонт - ексклюзив','Проведено капітальний ремонт - ексклюзив')]
+choise_3 = [('Стан добрий','Стан добрий'),('Незадовільний','Незадовільний'),('Задовільний','Задовільний'),('Відмінний','Відмінний'),('Ексклюзив','Ексклюзив'),('"Нульовий" цикл','"Нульовий" цикл')]
+choise_4 = [('Вхід з балкону','Вхід з балкону'),('Вхід в кухню','Вхід в кухню'),('Кухня без вікна','Кухня без вікна'),('Вигоди в спільному користуванні','Вигоди в спільному користуванні'),('Без вигод','Без вигод')]
+choise = choise_1+choise_2+choise_3+choise_4
+      
+# Driver Code    
+dictionary = {}
+print (Convert_1(choise, dictionary))
 
-
-
-#%%
-# extract text from file
-import requests
-from bs4 import BeautifulSoup
-import os
-import re
-
-#url = 'https://www.sacred-texts.com/tarot/pkt/pktwaki.htm'
-url = 'https://centrbud.com.ua/?p=18734'
-r = requests.get(url, allow_redirects=True)
-file = r.content
-soup = BeautifulSoup(file, 'html.parser')
-#tag = soup.find('body',attrs={"id": "pills-2"})
-tag = soup.find('body')
-urls = tag.find_all("p")
-
-for url in urls:
-    if "Meanings" in url.get_text():
-        print(url.get_text())
-
+choise_dictionary = {'Прибудинкова територія': 0.95, 'Зелене оточення': 0.95, 'Шум загазованість': 0.95, 'Виробнича зона': 0.95, 'Стан будинку відповідає його віку': 1.0, 'Значні тріщини в стінах, сирість, руйнування даху': 0.75, 'Волосяні тріщини, відпадання штукатурки фасаду, протікання даху': 0.85, 'Проведено капітальний ремонт': 1.15, 'Проведено капітальний ремонт - ексклюзив': 1.25, 'Стан добрий': 1, 'Незадовільний': 1, 'Задовільний': 1, 'Відмінний': 1, 'Ексклюзив': 1, '"Нульовий" цикл': 1, 'Вхід з балкону': 1, 'Вхід в кухню': 1, 'Кухня без вікна': 1, 'Вигоди в спільному користуванні': 1, 'Без вигод': 1}
 
 #%%
-# extract text from file
-import requests
-from bs4 import BeautifulSoup
-import os
-import re
+# import csv file
+import csv, os
+records = []
+f = open("D:/python/mysite/online/table.csv", encoding='utf-8')
+for row in csv.reader(f):
+    #for r in row:unicode(cell, 'utf-8')
+    records.append(row)
+    print(row[2])
 
-#url = 'https://www.sacred-texts.com/tarot/pkt/pktwaki.htm'
-url = 'https://centrbud.com.ua/?p=18734'
-r = requests.get(url, allow_redirects=True)
-file = r.content
-soup = BeautifulSoup(file, 'html.parser')
-#tag = soup.find('body',attrs={"id": "pills-2"})
-tag = soup.find('body')
-urls = tag.find_all("p")
-
-for url in urls:
-    print(url.get_text())
-        
-#%%
-# extract url from file
-import requests
-from bs4 import BeautifulSoup
-import os
-import re
-
-
-url = 'https://www.sacred-texts.com/tarot/pkt/pktwaki.htm'
-r = requests.get(url, allow_redirects=True)
-file = r.content
-soup = BeautifulSoup(file, 'html.parser')
-#tag = soup.find('body',attrs={"id": "pills-2"})
-tag = soup.find('body')
-#urls = tag.findAll('a')
-urls = tag.find_all(href=re.compile("jpg"))
-print(urls[0].get('href'))
-for url in urls:
-    print('https://www.sacred-texts.com/tarot/pkt/' + str(url.get('href')))
-
-#%%
-# meanning card tarrot https://www.sacred-texts.com/tarot/pkt/pkt0303.htm
-meaning = ['ZERO. THE FOOL.--Folly, mania, extravagance, intoxication, delirium, frenzy, bewrayment. Reversed: Negligence, absence, distribution, carelessness, apathy, nullity, vanity.', '1. THE MAGICIAN.--Skill, diplomacy, address, subtlety; sickness, pain, loss, disaster, snares of enemies; self-confidence, will; the Querent, if male. Reversed: Physician, Magus, mental disease, disgrace, disquiet.', '2. THE HIGH PRIESTESS.--Secrets, mystery, the future as yet unrevealed; the woman who interests the Querent, if male; the Querent herself, if female; silence, tenacity; mystery, wisdom, science. Reversed: Passion, moral or physical ardour, conceit, surface knowledge.', '3. THE EMPRESS.--Fruitfulness, action, initiative, length of days; the unknown, clandestine; also difficulty, doubt, ignorance. Reversed: Light, truth, the unravelling of involved matters, public rejoicings; according to another reading, vacillation.', '4. THE EMPEROR.--Stability, power, protection, realization; a great person; aid, reason, conviction; also authority and will. Reversed: Benevolence, compassion, credit; also confusion to enemies, obstruction, immaturity.', '5. THE HIEROPHANT.--Marriage, alliance, captivity, servitude; by another account, mercy and goodness; inspiration; the man to whom the Querent has recourse. Reversed: Society, good understanding, concord, overkindness, weakness.', '6. THE LOVERS.--Attraction, love, beauty, trials overcome. Reversed: Failure, foolish designs. Another account speaks of marriage frustrated and contrarieties of all kinds.', '7. THE CHARIOT.--Succour, providence also war, triumph, presumption, vengeance, trouble. Reversed: Riot, quarrel, dispute, litigation, defeat.', '8. FORTITUDE.--Power, energy, action, courage, magnanimity; also complete success and honours. Reversed: Despotism, abuse if power, weakness, discord, sometimes even disgrace.', '9. THE HERMIT.--Prudence, circumspection; also and especially treason, dissimulation, roguery, corruption. Reversed: Concealment, disguise, policy, fear, unreasoned caution.', '10. WHEEL OF FORTUNE.-Destiny, fortune, success, elevation, luck, felicity. Reversed: Increase, abundance, superfluity.', '11. JUSTICE.--Equity, rightness, probity, executive; triumph of the deserving side in law. Reversed: Law in all its departments, legal complications, bigotry, bias, excessive severity.', '12. THE HANGED MAN.--Wisdom, circumspection, discernment, trials, sacrifice, intuition, divination, prophecy. Reversed: Selfishness, the crowd, body politic.', '13. DEATH.--End, mortality, destruction, corruption also, for a man, the loss of a benefactor for a woman, many contrarieties; for a maid, failure of marriage projects. Reversed: Inertia, sleep, lethargy, petrifaction, somnambulism; hope destroyed.', '14. TEMPERANCE.--Economy, moderation, frugality, management, accommodation. Reversed: Things connected with churches, religions, sects, the priesthood, sometimes even the priest who will marry the Querent; also disunion, unfortunate combinations, competing interests.', '15. THE DEVIL.--Ravage, violence, vehemence, extraordinary efforts, force, fatality; that which is predestined but is not for this reason evil. Reversed: Evil fatality, weakness, pettiness, blindness.', '16. THE TOWER.--Misery, distress, indigence, adversity, calamity, disgrace, deception, ruin. It is a card in particular of unforeseen catastrophe. Reversed: According to one account, the same in a lesser degree also oppression, imprisonment, tyranny.', '17. THE STAR.--Loss, theft, privation, abandonment; another reading says-hope and bright prospects, Reversed: Arrogance, haughtiness, impotence.', '18. THE MOON.--Hidden enemies, danger, calumny, darkness, terror, deception, occult forces, error. Reversed: Instability, inconstancy, silence, lesser degrees of deception and error.', '19. THE SUN.--Material happiness, fortunate marriage, contentment. Reversed: The same in a lesser sense.', '20. THE LAST JUDGMENT.--Change of position, renewal, outcome. Another account specifies total loss though lawsuit. Reversed: Weakness, pusillanimity, simplicity; also deliberation, decision, sentence.', '21. THE WORLD.--Assured success, recompense, voyage, route, emigration, flight, change of place. Reversed: Inertia, fixity, stagnation, permanence.']
-print(len(meaning))
-meaning_2 = {'01_pktwaki.jpg': 'Meanings: Dark man, friendly, countryman, generally married, honest and conscientious. The card always signifies honesty, and may mean news concerning an unexpected heritage to fall in before very long. Reversed: Good, but severe; austere, yet tolerant.', '02_pktwaqu.jpg': 'Meanings: A dark woman, countrywoman, friendly, chaste, loving, honourable. If the card beside her signifies a man, she is well disposed towards him; if a woman, she is interested in the Querent. Also, love of money, or a certain success in business. Reversed: Good, economical, obliging, serviceable. Signifies also--but in certain positions and in the neighbourhood of other cards tending in such directions--opposition, jealousy, even deceit and infidelity.', '03_pktwakn.jpg': 'Meanings: Departure, absence, flight, emigration. A dark young man, friendly. Change of residence. Reversed: Rupture, division, interruption, discord.', '04_pktwapa.jpg': 'Meanings: Dark young man, faithful, a lover, an envoy, a postman. Beside a man, he will bear favourable testimony concerning him. A dangerous rival, if followed by the Page of Cups. Has the chief qualities of his suit. He may signify family intelligence. Reversed: Anecdotes, announcements, evil news. Also indecision and the instability which accompanies it.', '05_pktwa10.jpg': 'Meanings: A card of many significances, and some of the readings cannot be harmonized. I set aside that which connects it with honour and good faith. The chief meaning is oppression simply, but it is also fortune, gain, any kind of success, and then it is the oppression of these things. It is also a card of false-seeming, disguise, perfidy. The place which the figure is approaching may suffer from the rods that he carries. Success is stultified if the Nine of Swords follows, and if it is a question of a lawsuit, there will be certain loss. Reversed: Contrarieties, difficulties, intrigues, and their analogies.', '06_pktwa09.jpg': 'Meanings: The card signifies strength in opposition. If attacked, the person will meet an onslaught boldly; and his build shews, that he may prove a formidable antagonist. With this main significance there are all its possible adjuncts--delay, suspension, adjournment. Reversed: Obstacles, adversity, calamity.', '07_pktwa08.jpg': 'Meanings: Activity in undertakings, the path of such activity, swiftness, as that of an express messenger; great haste, great hope, speed towards an end which promises assured felicity; generally, that which is on the move; also the arrows of love. Reversed: Arrows of jealousy, internal dispute, stingings of conscience, quarrels; and domestic disputes for persons who are married.', '08_pktwa07.jpg': 'Meanings: It is a card of valour, for, on the surface, six are attacking one, who has, however, the vantage position. On the intellectual plane, it signifies discussion, wordy strife; in business--negotiations, war of trade, barter, competition. It is further a card of success, for the combatant is on the top and his enemies may be unable to reach him. Reversed: Perplexity, embarrassments, anxiety. It is also a caution against indecision.', '09_pktwa06.jpg': "Meanings: The card has been so designed that it can cover several significations; on the surface, it is a victor triumphing, but it is also great news, such as might be carried in state by the King's courier; it is expectation crowned with its own desire, the crown of hope, and so forth. Reversed: Apprehension, fear, as of a victorious enemy at the gate; treachery, disloyalty, as of gates being opened to the enemy; also indefinite delay.", '10_pktwa05.jpg': 'Meanings: Imitation, as, for example, sham fight, but also the strenuous competition and struggle of the search after riches and fortune. In this sense it connects with the battle of life. Hence some attributions say that it is a card of gold, gain, opulence. Reversed: Litigation, disputes, trickery, contradiction.', '11_pktwa04.jpg': 'Meanings: They are for once almost on the surface--country life, haven of refuge, a species of domestic harvest-home, repose, concord, harmony, prosperity, peace, and the perfected work of these. Reversed: The meaning remains unaltered; it is prosperity, increase, felicity, beauty, embellishment.', '12_pktwa03.jpg': 'Meanings: He symbolizes established strength, enterprise, effort, trade, commerce, discovery; those are his ships, bearing his merchandise, which are sailing over the sea. The card also signifies able co-operation in business, as if the successful merchant prince were looking from his side towards yours with a view to help you. Reversed: The end of troubles, suspension or cessation of adversity, toil and disappointment.', '13_pktwa02.jpg': "Meanings: Between the alternative readings there is no marriage possible; on the one hand, riches, fortune, magnificence; on the other, physical suffering, disease, chagrin, sadness, mortification. The design gives one suggestion; here is a lord overlooking his dominion and alternately contemplating a globe; it looks like the malady, the mortification, the sadness of Alexander amidst the grandeur of this world's wealth. Reversed: Surprise, wonder, enchantment, emotion, trouble, fear.", '14_pktwaac.jpg': 'Meanings: Creation, invention, enterprise, the powers which result in these; principle, beginning, source; birth, family, origin, and in a sense the virility which is behind them; the starting point of enterprises; according to another account, money, fortune, inheritance. Reversed: Fall, decadence, ruin, perdition, to perish also a certain clouded joy.', '15_pktcuki.jpg': 'Meanings: Fair man, man of business, law, or divinity; responsible, disposed to oblige the Querent; also equity, art and science, including those who profess science, law and art; creative intelligence. Reversed: Dishonest, double-dealing man; roguery, exaction, injustice, vice, scandal, pillage, considerable loss.', '16_pktcuqu.jpg': 'Meanings: Good, fair woman; honest, devoted woman, who will do service to the Querent; loving intelligence, and hence the gift of vision; success, happiness, pleasure; also wisdom, virtue; a perfect spouse and a good mother. Reversed: The accounts vary; good woman; otherwise, distinguished woman but one not to be trusted; perverse woman; vice, dishonour, depravity.', '17_pktcukn.jpg': 'Meanings: Arrival, approach--sometimes that of a messenger; advances, proposition, demeanour, invitation, incitement. Reversed: Trickery, artifice, subtlety, swindling, duplicity, fraud.', '18_pktcupa.jpg': 'Meanings: Fair young man, one impelled to render service and with whom the Querent will be connected; a studious youth; news, message; application, reflection, meditation; also these things directed to business. Reversed: Taste, inclination, attachment, seduction, deception, artifice.', '19_pktcu10.jpg': "Meanings: Contentment, repose of the entire heart; the perfection of that state; also perfection of human love and friendship; if with several picture-cards, a person who is taking charge of the Querent's interests; also the town, village or country inhabited by the Querent. Reversed: Repose of the false heart, indignation, violence.", '20_pktcu09.jpg': 'Meanings: Concord, contentment, physical bien-être; also victory, success, advantage; satisfaction for the Querent or person for whom the consultation is made. Reversed: Truth, loyalty, liberty; but the readings vary and include mistakes, imperfections, etc.', '21_pktcu08.jpg': 'Meanings: The card speaks for itself on the surface, but other readings are entirely antithetical--giving joy, mildness, timidity, honour, modesty. In practice, it is usually found that the card shews the decline of a matter, or that a matter which has been thought to be important is really of slight consequence--either for good or evil. Reversed: Great joy, happiness, feasting.', '22_pktcu07.jpg': 'Meanings: Fairy favours, images of reflection, sentiment, imagination, things seen in the glass of contemplation; some attainment in these degrees, but nothing permanent or substantial is suggested. Reversed: Desire, will, determination, project.', '23_pktcu06.jpg': 'Meanings: A card of the past and of memories, looking back, as--for example--on childhood; happiness, enjoyment, but coming rather from the past; things that have vanished. Another reading reverses this, giving new relations, new knowledge, new environment, and then the children are disporting in an unfamiliar precinct. Reversed: The future, renewal, that which will come to pass presently.', '24_pktcu05.jpg': 'Meanings: It is a card of loss, but something remains over; three have been taken, but two are left; it is a card of inheritance, patrimony, transmission, but not corresponding to expectations; with some interpreters it is a card of marriage, but not without bitterness or frustration. Reversed: News, alliances, affinity, consanguinity, ancestry, return, false projects.', '25_pktcu04.jpg': 'Meanings: Weariness, disgust, aversion, imaginary vexations, as if the wine of this world had caused satiety only; another wine, as if a fairy gift, is now offered the wastrel, but he sees no consolation therein. This is also a card of blended pleasure. Reversed: Novelty, presage, new instruction, new relations.', '26_pktcu03.jpg': 'Meanings: The conclusion of any matter in plenty, perfection and merriment; happy issue, victory, fulfilment, solace, healing, Reversed: Expedition, dispatch, achievement, end. It signifies also the side of excess in physical enjoyment, and the pleasures of the senses.', '27_pktcu02.jpg': 'Meanings: Love, passion, friendship, affinity, union, concord, sympathy, the interrelation of the sexes, and--as a suggestion apart from all offices of divination--that desire which is not in Nature, but by which Nature is sanctified.', '28_pktcuac.jpg': 'Meanings: House of the true heart, joy, content, abode, nourishment, abundance, fertility; Holy Table, felicity hereof. Reversed: House of the false heart, mutation, instability, revolution.', '29_pktswki.jpg': 'Meanings: Whatsoever arises out of the idea of judgment and all its connexions-power, command, authority, militant intelligence, law, offices of the crown, and so forth. Reversed: Cruelty, perversity, barbarity, perfidy, evil intention.', '30_pktswqu.jpg': 'Meanings: Widowhood, female sadness and embarrassment, absence, sterility, mourning, privation, separation. Reversed: Malice, bigotry, artifice, prudery, bale, deceit.', '31_pktswkn.jpg': 'Meanings: Skill, bravery, capacity, defence, address, enmity, wrath, war, destruction, opposition, resistance, ruin. There is therefore a sense in which the card signifies death, but it carries this meaning only in its proximity to other cards of fatality. Reversed: Imprudence, incapacity, extravagance.', '32_pktswpa.jpg': 'Meanings: Authority, overseeing, secret service, vigilance, spying, examination, and the qualities thereto belonging. Reversed: More evil side of these qualities; what is unforeseen, unprepared state; sickness is also intimated.', '33_pktsw10.jpg': 'Meanings: Whatsoever is intimated by the design; also pain, affliction, tears, sadness, desolation. It is not especially a card of violent death. Reversed: Advantage, profit, success, favour, but none of these are permanent; also power and authority.', '34_pktsw09.jpg': 'Meanings: Death, failure, miscarriage, delay, deception, disappointment, despair. Reversed: Imprisonment, suspicion, doubt, reasonable fear, shame.', '35_pktsw08.jpg': 'Meanings: Bad news, violent chagrin, crisis, censure, power in trammels, conflict, calumny; also sickness. Reversed: Disquiet, difficulty, opposition, accident, treachery; what is unforeseen; fatality.', '36_pktsw07.jpg': 'Meanings: Design, attempt, wish, hope, confidence; also quarrelling, a plan that may fail, annoyance. The design is uncertain in its import, because the significations are widely at variance with each other. Reversed: Good advice, counsel, instruction, slander, babbling.', '37_pktsw06.jpg': 'Meanings: journey by water, route, way, envoy, commissionary, expedient. Reversed: Declaration, confession, publicity; one account says that it is a proposal of love.', '38_pktsw05.jpg': 'Meanings: Degradation, destruction, revocation, infamy, dishonour, loss, with the variants and analogues of these. Reversed: The same; burial and obsequies.', '39_pktsw04.jpg': "Meanings: Vigilance, retreat, solitude, hermit's repose, exile, tomb and coffin. It is these last that have suggested the design. Reversed: Wise administration, circumspection, economy, avarice, precaution, testament.", '40_pktsw03.jpg': 'Meanings: Removal, absence, delay, division, rupture, dispersion, and all that the design signifies naturally, being too simple and obvious to call for specific enumeration. Reversed: Mental alienation, error, loss, distraction, disorder, confusion.', '41_pktsw02.jpg': 'Meanings: Conformity and the equipoise which it suggests, courage, friendship, concord in a state of arms; another reading gives tenderness, affection, intimacy. The suggestion of harmony and other favourable readings must be considered in a qualified manner, as Swords generally are not symbolical of beneficent forces in human affairs. Reversed: Imposture, falsehood, duplicity, disloyalty.', '42_pktswac.jpg': 'Meanings: Triumph, the excessive degree in everything, conquest, triumph of force. It is a card of great force, in love as well as in hatred. The crown may carry a much higher significance than comes usually within the sphere of fortune-telling. Reversed: The same, but the results are disastrous; another account says--conception, childbirth, augmentation, multiplicity.', '43_pktpeki.jpg': 'Meanings: Valour, realizing intelligence, business and normal intellectual aptitude, sometimes mathematical gifts and attainments of this kind; success in these paths. Reversed: Vice, weakness, ugliness, perversity, corruption, peril.', '44_pktpequ.jpg': 'Meanings: Opulence, generosity, magnificence, security, liberty. Reversed: Evil, suspicion, suspense, fear, mistrust.', '45_pktpekn.jpg': 'Meanings: Utility, serviceableness, interest, responsibility, rectitude-all on the normal and external plane. Reversed: inertia, idleness, repose of that kind, stagnation; also placidity, discouragement, carelessness.', '46_pktpepa.jpg': 'Meanings: Application, study, scholarship, reflection another reading says news, messages and the bringer thereof; also rule, management. Reversed: Prodigality, dissipation, liberality, luxury; unfavourable news.', '47_pktpe10.jpg': 'Meanings: Gain, riches; family matters, archives, extraction, the abode of a family. Reversed: Chance, fatality, loss, robbery, games of hazard; sometimes gift, dowry, pension.', '48_pktpe09.jpg': 'Meanings: Prudence, safety, success, accomplishment, certitude, discernment. Reversed: Roguery, deception, voided project, bad faith.', '49_pktpe08.jpg': 'Meanings: Work, employment, commission, craftsmanship, skill in craft and business, perhaps in the preparatory stage. Reversed: Voided ambition, vanity, cupidity, exaction, usury. It may also signify the possession of skill, in the sense of the ingenious mind turned to cunning and intrigue.', '50_pktpe07.jpg': 'Meanings: These are exceedingly contradictory; in the main, it is a card of money, business, barter; but one reading gives altercation, quarrels--and another innocence, ingenuity, purgation. Reversed: Cause for anxiety regarding money which it may be proposed to lend.', '51_pktpe06.jpg': 'Meanings: Presents, gifts, gratification another account says attention, vigilance now is the accepted time, present prosperity, etc. Reversed: Desire, cupidity, envy, jealousy, illusion.', '52_pktpe05.jpg': 'Meanings: The card foretells material trouble above all, whether in the form illustrated--that is, destitution--or otherwise. For some cartomancists, it is a card of love and lovers-wife, husband, friend, mistress; also concordance, affinities. These alternatives cannot be harmonized. Reversed: Disorder, chaos, ruin, discord, profligacy.', '53_pktpe04.jpg': 'Meanings: The surety of possessions, cleaving to that which one has, gift, legacy, inheritance. Reversed: Suspense, delay, opposition.', '54_pktpe03.jpg': 'Meanings: Métier, trade, skilled labour; usually, however, regarded as a card of nobility, aristocracy, renown, glory. Reversed: Mediocrity, in work and otherwise, puerility, pettiness, weakness.', '55_pktpe02.jpg': 'Meanings: On the one hand it is represented as a card of gaiety, recreation and its connexions, which is the subject of the design; but it is read also as news and messages in writing, as obstacles, agitation, trouble, embroilment. Reversed: Enforced gaiety, simulated enjoyment, literal sense, handwriting, composition, letters of exchange.', '56_pktpeac.jpg': 'Meanings: Perfect contentment, felicity, ecstasy; also speedy intelligence; gold. Reversed: The evil side of wealth, bad intelligence; also great riches. In any case it shews prosperity, comfortable material conditions, but whether these are of advantage to the possessor will depend on whether the card is reversed or not.'}
-
-#%%
-# run SQL in sqllite
-import sqlite3
-con = sqlite3.connect('E:/install/python/tarrot/db.sqlite3')
-#sql = 'SELECT name from sqlite_master where type= "table"' # name all tables
-sql = ' SELECT card, card_meaning FROM cards_cards'  # table structure
-#sql = 'UPDATE cards_cards SET card_meaning = REPLACE(card_meaning, "\" , "")'
-
-cursorObj = con.cursor()
-cursorObj.execute(sql)
-print(cursorObj.fetchall())
-con.close()
-
-
+f.close()
 
 
 #%%
 # work with MySQL
 #pip install mysql-connector-python
-# Fill database table data
 import mysql.connector
 import sqlite3
+import os
 
-def list_file_dir():
-    #base_dir = os.path.dirname(os.path.realpath(__file__))
-    #files_dir = os.path.join(base_dir,'static','media','cards')
-    files_dir = 'e:/install/python/pursing/files/'
-    list_file=[]
-    for filename in os.listdir(files_dir):
-        list_file.append(filename)
-        #print(filename)
-    return list_file
-
-cards_22 = ['ar00.jpg', 'ar01.jpg', 'ar02.jpg', 'ar03.jpg', 'ar04.jpg', 'ar05.jpg', 'ar06.jpg', 'ar07.jpg', 'ar08.jpg', 'ar09.jpg', 'ar10.jpg', 'ar11.jpg', 'ar12.jpg', 'ar13.jpg', 'ar14.jpg', 'ar15.jpg', 'ar16.jpg', 'ar17.jpg', 'ar18.jpg', 'ar19.jpg', 'ar20.jpg', 'ar21.jpg']
-cards_name_meaning_22 = ['ZERO. THE FOOL.--Folly, mania, extravagance, intoxication, delirium, frenzy, bewrayment. Reversed: Negligence, absence, distribution, carelessness, apathy, nullity, vanity.', '1. THE MAGICIAN.--Skill, diplomacy, address, subtlety; sickness, pain, loss, disaster, snares of enemies; self-confidence, will; the Querent, if male. Reversed: Physician, Magus, mental disease, disgrace, disquiet.', '2. THE HIGH PRIESTESS.--Secrets, mystery, the future as yet unrevealed; the woman who interests the Querent, if male; the Querent herself, if female; silence, tenacity; mystery, wisdom, science. Reversed: Passion, moral or physical ardour, conceit, surface knowledge.', '3. THE EMPRESS.--Fruitfulness, action, initiative, length of days; the unknown, clandestine; also difficulty, doubt, ignorance. Reversed: Light, truth, the unravelling of involved matters, public rejoicings; according to another reading, vacillation.', '4. THE EMPEROR.--Stability, power, protection, realization; a great person; aid, reason, conviction; also authority and will. Reversed: Benevolence, compassion, credit; also confusion to enemies, obstruction, immaturity.', '5. THE HIEROPHANT.--Marriage, alliance, captivity, servitude; by another account, mercy and goodness; inspiration; the man to whom the Querent has recourse. Reversed: Society, good understanding, concord, overkindness, weakness.', '6. THE LOVERS.--Attraction, love, beauty, trials overcome. Reversed: Failure, foolish designs. Another account speaks of marriage frustrated and contrarieties of all kinds.', '7. THE CHARIOT.--Succour, providence also war, triumph, presumption, vengeance, trouble. Reversed: Riot, quarrel, dispute, litigation, defeat.', '8. FORTITUDE.--Power, energy, action, courage, magnanimity; also complete success and honours. Reversed: Despotism, abuse if power, weakness, discord, sometimes even disgrace.', '9. THE HERMIT.--Prudence, circumspection; also and especially treason, dissimulation, roguery, corruption. Reversed: Concealment, disguise, policy, fear, unreasoned caution.', '10. WHEEL OF FORTUNE.-Destiny, fortune, success, elevation, luck, felicity. Reversed: Increase, abundance, superfluity.', '11. JUSTICE.--Equity, rightness, probity, executive; triumph of the deserving side in law. Reversed: Law in all its departments, legal complications, bigotry, bias, excessive severity.', '12. THE HANGED MAN.--Wisdom, circumspection, discernment, trials, sacrifice, intuition, divination, prophecy. Reversed: Selfishness, the crowd, body politic.', '13. DEATH.--End, mortality, destruction, corruption also, for a man, the loss of a benefactor for a woman, many contrarieties; for a maid, failure of marriage projects. Reversed: Inertia, sleep, lethargy, petrifaction, somnambulism; hope destroyed.', '14. TEMPERANCE.--Economy, moderation, frugality, management, accommodation. Reversed: Things connected with churches, religions, sects, the priesthood, sometimes even the priest who will marry the Querent; also disunion, unfortunate combinations, competing interests.', '15. THE DEVIL.--Ravage, violence, vehemence, extraordinary efforts, force, fatality; that which is predestined but is not for this reason evil. Reversed: Evil fatality, weakness, pettiness, blindness.', '16. THE TOWER.--Misery, distress, indigence, adversity, calamity, disgrace, deception, ruin. It is a card in particular of unforeseen catastrophe. Reversed: According to one account, the same in a lesser degree also oppression, imprisonment, tyranny.', '17. THE STAR.--Loss, theft, privation, abandonment; another reading says-hope and bright prospects, Reversed: Arrogance, haughtiness, impotence.', '18. THE MOON.--Hidden enemies, danger, calumny, darkness, terror, deception, occult forces, error. Reversed: Instability, inconstancy, silence, lesser degrees of deception and error.', '19. THE SUN.--Material happiness, fortunate marriage, contentment. Reversed: The same in a lesser sense.', '20. THE LAST JUDGMENT.--Change of position, renewal, outcome. Another account specifies total loss though lawsuit. Reversed: Weakness, pusillanimity, simplicity; also deliberation, decision, sentence.', '21. THE WORLD.--Assured success, recompense, voyage, route, emigration, flight, change of place. Reversed: Inertia, fixity, stagnation, permanence.']
-
-cards_name_56 = ['King of Wands','Queen of Wands','Knight of Wands','Page of Wands','Ten of Wands','Nine of Wands','Eight of Wands','Seven of Wands','Six of Wands','Five of Wands','Four of Wands','Three of Wands','Two of Wands','Ace of Wands','King of Cups','Queen of Cups','Knight of Cups','Page of Cups','Ten of Cups','Nine of Cups','Eight of Cups','Seven of Cups','Six of Cups','Five of Cups','Four of Cups','Three of Cups','Two of Cups','Ace of Cups','King of Swords','Queen of Swords','Knight of Swords','Page of Swords','Ten of Swords','Nine of Swords','Eight of Swords','Seven of Swords','Six of Swords','Five of Swords','Four of Swords','Three of Swords','Two of Swords','Ace of Swords','King of Pentacles','Queen of Pentacles','Knight of Pentacles','Page of Pentacles','Ten of Pentacles','Nine of Pentacles','Eight of Pentacles','Seven of Pentacles','Six of Pentacles','Five of Pentacles','Four of Pentacles','Three of Pentacles','Two of Pentacles','Ace of Pentacles']
-cards_56_meaning = {'01_pktwaki.jpg': 'Dark man, friendly, countryman, generally married, honest and conscientious. The card always signifies honesty, and may mean news concerning an unexpected heritage to fall in before very long. Reversed: Good, but severe; austere, yet tolerant.', '02_pktwaqu.jpg': 'A dark woman, countrywoman, friendly, chaste, loving, honourable. If the card beside her signifies a man, she is well disposed towards him; if a woman, she is interested in the Querent. Also, love of money, or a certain success in business. Reversed: Good, economical, obliging, serviceable. Signifies also--but in certain positions and in the neighbourhood of other cards tending in such directions--opposition, jealousy, even deceit and infidelity.', '03_pktwakn.jpg': 'Departure, absence, flight, emigration. A dark young man, friendly. Change of residence. Reversed: Rupture, division, interruption, discord.', '04_pktwapa.jpg': 'Dark young man, faithful, a lover, an envoy, a postman. Beside a man, he will bear favourable testimony concerning him. A dangerous rival, if followed by the Page of Cups. Has the chief qualities of his suit. He may signify family intelligence. Reversed: Anecdotes, announcements, evil news. Also indecision and the instability which accompanies it.', '05_pktwa10.jpg': 'A card of many significances, and some of the readings cannot be harmonized. I set aside that which connects it with honour and good faith. The chief meaning is oppression simply, but it is also fortune, gain, any kind of success, and then it is the oppression of these things. It is also a card of false-seeming, disguise, perfidy. The place which the figure is approaching may suffer from the rods that he carries. Success is stultified if the Nine of Swords follows, and if it is a question of a lawsuit, there will be certain loss. Reversed: Contrarieties, difficulties, intrigues, and their analogies.', '06_pktwa09.jpg': 'The card signifies strength in opposition. If attacked, the person will meet an onslaught boldly; and his build shews, that he may prove a formidable antagonist. With this main significance there are all its possible adjuncts--delay, suspension, adjournment. Reversed: Obstacles, adversity, calamity.', '07_pktwa08.jpg': 'Activity in undertakings, the path of such activity, swiftness, as that of an express messenger; great haste, great hope, speed towards an end which promises assured felicity; generally, that which is on the move; also the arrows of love. Reversed: Arrows of jealousy, internal dispute, stingings of conscience, quarrels; and domestic disputes for persons who are married.', '08_pktwa07.jpg': 'It is a card of valour, for, on the surface, six are attacking one, who has, however, the vantage position. On the intellectual plane, it signifies discussion, wordy strife; in business--negotiations, war of trade, barter, competition. It is further a card of success, for the combatant is on the top and his enemies may be unable to reach him. Reversed: Perplexity, embarrassments, anxiety. It is also a caution against indecision.', '09_pktwa06.jpg': "The card has been so designed that it can cover several significations; on the surface, it is a victor triumphing, but it is also great news, such as might be carried in state by the King's courier; it is expectation crowned with its own desire, the crown of hope, and so forth. Reversed: Apprehension, fear, as of a victorious enemy at the gate; treachery, disloyalty, as of gates being opened to the enemy; also indefinite delay.", '10_pktwa05.jpg': 'Imitation, as, for example, sham fight, but also the strenuous competition and struggle of the search after riches and fortune. In this sense it connects with the battle of life. Hence some attributions say that it is a card of gold, gain, opulence. Reversed: Litigation, disputes, trickery, contradiction.', '11_pktwa04.jpg': 'They are for once almost on the surface--country life, haven of refuge, a species of domestic harvest-home, repose, concord, harmony, prosperity, peace, and the perfected work of these. Reversed: The meaning remains unaltered; it is prosperity, increase, felicity, beauty, embellishment.', '12_pktwa03.jpg': 'He symbolizes established strength, enterprise, effort, trade, commerce, discovery; those are his ships, bearing his merchandise, which are sailing over the sea. The card also signifies able co-operation in business, as if the successful merchant prince were looking from his side towards yours with a view to help you. Reversed: The end of troubles, suspension or cessation of adversity, toil and disappointment.', '13_pktwa02.jpg': "Between the alternative readings there is no marriage possible; on the one hand, riches, fortune, magnificence; on the other, physical suffering, disease, chagrin, sadness, mortification. The design gives one suggestion; here is a lord overlooking his dominion and alternately contemplating a globe; it looks like the malady, the mortification, the sadness of Alexander amidst the grandeur of this world's wealth. Reversed: Surprise, wonder, enchantment, emotion, trouble, fear.", '14_pktwaac.jpg': 'Creation, invention, enterprise, the powers which result in these; principle, beginning, source; birth, family, origin, and in a sense the virility which is behind them; the starting point of enterprises; according to another account, money, fortune, inheritance. Reversed: Fall, decadence, ruin, perdition, to perish also a certain clouded joy.', '15_pktcuki.jpg': 'Fair man, man of business, law, or divinity; responsible, disposed to oblige the Querent; also equity, art and science, including those who profess science, law and art; creative intelligence. Reversed: Dishonest, double-dealing man; roguery, exaction, injustice, vice, scandal, pillage, considerable loss.', '16_pktcuqu.jpg': 'Good, fair woman; honest, devoted woman, who will do service to the Querent; loving intelligence, and hence the gift of vision; success, happiness, pleasure; also wisdom, virtue; a perfect spouse and a good mother. Reversed: The accounts vary; good woman; otherwise, distinguished woman but one not to be trusted; perverse woman; vice, dishonour, depravity.', '17_pktcukn.jpg': 'Arrival, approach--sometimes that of a messenger; advances, proposition, demeanour, invitation, incitement. Reversed: Trickery, artifice, subtlety, swindling, duplicity, fraud.', '18_pktcupa.jpg': 'Fair young man, one impelled to render service and with whom the Querent will be connected; a studious youth; news, message; application, reflection, meditation; also these things directed to business. Reversed: Taste, inclination, attachment, seduction, deception, artifice.', '19_pktcu10.jpg': "Contentment, repose of the entire heart; the perfection of that state; also perfection of human love and friendship; if with several picture-cards, a person who is taking charge of the Querent's interests; also the town, village or country inhabited by the Querent. Reversed: Repose of the false heart, indignation, violence.", '20_pktcu09.jpg': 'Concord, contentment, physical bien-être; also victory, success, advantage; satisfaction for the Querent or person for whom the consultation is made. Reversed: Truth, loyalty, liberty; but the readings vary and include mistakes, imperfections, etc.', '21_pktcu08.jpg': 'The card speaks for itself on the surface, but other readings are entirely antithetical--giving joy, mildness, timidity, honour, modesty. In practice, it is usually found that the card shews the decline of a matter, or that a matter which has been thought to be important is really of slight consequence--either for good or evil. Reversed: Great joy, happiness, feasting.', '22_pktcu07.jpg': 'Fairy favours, images of reflection, sentiment, imagination, things seen in the glass of contemplation; some attainment in these degrees, but nothing permanent or substantial is suggested. Reversed: Desire, will, determination, project.', '23_pktcu06.jpg': 'A card of the past and of memories, looking back, as--for example--on childhood; happiness, enjoyment, but coming rather from the past; things that have vanished. Another reading reverses this, giving new relations, new knowledge, new environment, and then the children are disporting in an unfamiliar precinct. Reversed: The future, renewal, that which will come to pass presently.', '24_pktcu05.jpg': 'It is a card of loss, but something remains over; three have been taken, but two are left; it is a card of inheritance, patrimony, transmission, but not corresponding to expectations; with some interpreters it is a card of marriage, but not without bitterness or frustration. Reversed: News, alliances, affinity, consanguinity, ancestry, return, false projects.', '25_pktcu04.jpg': 'Weariness, disgust, aversion, imaginary vexations, as if the wine of this world had caused satiety only; another wine, as if a fairy gift, is now offered the wastrel, but he sees no consolation therein. This is also a card of blended pleasure. Reversed: Novelty, presage, new instruction, new relations.', '26_pktcu03.jpg': 'The conclusion of any matter in plenty, perfection and merriment; happy issue, victory, fulfilment, solace, healing, Reversed: Expedition, dispatch, achievement, end. It signifies also the side of excess in physical enjoyment, and the pleasures of the senses.', '27_pktcu02.jpg': 'Love, passion, friendship, affinity, union, concord, sympathy, the interrelation of the sexes, and--as a suggestion apart from all offices of divination--that desire which is not in Nature, but by which Nature is sanctified.', '28_pktcuac.jpg': 'House of the true heart, joy, content, abode, nourishment, abundance, fertility; Holy Table, felicity hereof. Reversed: House of the false heart, mutation, instability, revolution.', '29_pktswki.jpg': 'Whatsoever arises out of the idea of judgment and all its connexions-power, command, authority, militant intelligence, law, offices of the crown, and so forth. Reversed: Cruelty, perversity, barbarity, perfidy, evil intention.', '30_pktswqu.jpg': 'Widowhood, female sadness and embarrassment, absence, sterility, mourning, privation, separation. Reversed: Malice, bigotry, artifice, prudery, bale, deceit.', '31_pktswkn.jpg': 'Skill, bravery, capacity, defence, address, enmity, wrath, war, destruction, opposition, resistance, ruin. There is therefore a sense in which the card signifies death, but it carries this meaning only in its proximity to other cards of fatality. Reversed: Imprudence, incapacity, extravagance.', '32_pktswpa.jpg': 'Authority, overseeing, secret service, vigilance, spying, examination, and the qualities thereto belonging. Reversed: More evil side of these qualities; what is unforeseen, unprepared state; sickness is also intimated.', '33_pktsw10.jpg': 'Whatsoever is intimated by the design; also pain, affliction, tears, sadness, desolation. It is not especially a card of violent death. Reversed: Advantage, profit, success, favour, but none of these are permanent; also power and authority.', '34_pktsw09.jpg': 'Death, failure, miscarriage, delay, deception, disappointment, despair. Reversed: Imprisonment, suspicion, doubt, reasonable fear, shame.', '35_pktsw08.jpg': 'Bad news, violent chagrin, crisis, censure, power in trammels, conflict, calumny; also sickness. Reversed: Disquiet, difficulty, opposition, accident, treachery; what is unforeseen; fatality.', '36_pktsw07.jpg': 'Design, attempt, wish, hope, confidence; also quarrelling, a plan that may fail, annoyance. The design is uncertain in its import, because the significations are widely at variance with each other. Reversed: Good advice, counsel, instruction, slander, babbling.', '37_pktsw06.jpg': 'journey by water, route, way, envoy, commissionary, expedient. Reversed: Declaration, confession, publicity; one account says that it is a proposal of love.', '38_pktsw05.jpg': 'Degradation, destruction, revocation, infamy, dishonour, loss, with the variants and analogues of these. Reversed: The same; burial and obsequies.', '39_pktsw04.jpg': "Vigilance, retreat, solitude, hermit's repose, exile, tomb and coffin. It is these last that have suggested the design. Reversed: Wise administration, circumspection, economy, avarice, precaution, testament.", '40_pktsw03.jpg': 'Removal, absence, delay, division, rupture, dispersion, and all that the design signifies naturally, being too simple and obvious to call for specific enumeration. Reversed: Mental alienation, error, loss, distraction, disorder, confusion.', '41_pktsw02.jpg': 'Conformity and the equipoise which it suggests, courage, friendship, concord in a state of arms; another reading gives tenderness, affection, intimacy. The suggestion of harmony and other favourable readings must be considered in a qualified manner, as Swords generally are not symbolical of beneficent forces in human affairs. Reversed: Imposture, falsehood, duplicity, disloyalty.', '42_pktswac.jpg': 'Triumph, the excessive degree in everything, conquest, triumph of force. It is a card of great force, in love as well as in hatred. The crown may carry a much higher significance than comes usually within the sphere of fortune-telling. Reversed: The same, but the results are disastrous; another account says--conception, childbirth, augmentation, multiplicity.', '43_pktpeki.jpg': 'Valour, realizing intelligence, business and normal intellectual aptitude, sometimes mathematical gifts and attainments of this kind; success in these paths. Reversed: Vice, weakness, ugliness, perversity, corruption, peril.', '44_pktpequ.jpg': 'Opulence, generosity, magnificence, security, liberty. Reversed: Evil, suspicion, suspense, fear, mistrust.', '45_pktpekn.jpg': 'Utility, serviceableness, interest, responsibility, rectitude-all on the normal and external plane. Reversed: inertia, idleness, repose of that kind, stagnation; also placidity, discouragement, carelessness.', '46_pktpepa.jpg': 'Application, study, scholarship, reflection another reading says news, messages and the bringer thereof; also rule, management. Reversed: Prodigality, dissipation, liberality, luxury; unfavourable news.', '47_pktpe10.jpg': 'Gain, riches; family matters, archives, extraction, the abode of a family. Reversed: Chance, fatality, loss, robbery, games of hazard; sometimes gift, dowry, pension.', '48_pktpe09.jpg': 'Prudence, safety, success, accomplishment, certitude, discernment. Reversed: Roguery, deception, voided project, bad faith.', '49_pktpe08.jpg': 'Work, employment, commission, craftsmanship, skill in craft and business, perhaps in the preparatory stage. Reversed: Voided ambition, vanity, cupidity, exaction, usury. It may also signify the possession of skill, in the sense of the ingenious mind turned to cunning and intrigue.', '50_pktpe07.jpg': 'These are exceedingly contradictory; in the main, it is a card of money, business, barter; but one reading gives altercation, quarrels--and another innocence, ingenuity, purgation. Reversed: Cause for anxiety regarding money which it may be proposed to lend.', '51_pktpe06.jpg': 'Presents, gifts, gratification another account says attention, vigilance now is the accepted time, present prosperity, etc. Reversed: Desire, cupidity, envy, jealousy, illusion.', '52_pktpe05.jpg': 'The card foretells material trouble above all, whether in the form illustrated--that is, destitution--or otherwise. For some cartomancists, it is a card of love and lovers-wife, husband, friend, mistress; also concordance, affinities. These alternatives cannot be harmonized. Reversed: Disorder, chaos, ruin, discord, profligacy.', '53_pktpe04.jpg': 'The surety of possessions, cleaving to that which one has, gift, legacy, inheritance. Reversed: Suspense, delay, opposition.', '54_pktpe03.jpg': 'Métier, trade, skilled labour; usually, however, regarded as a card of nobility, aristocracy, renown, glory. Reversed: Mediocrity, in work and otherwise, puerility, pettiness, weakness.', '55_pktpe02.jpg': 'On the one hand it is represented as a card of gaiety, recreation and its connexions, which is the subject of the design; but it is read also as news and messages in writing, as obstacles, agitation, trouble, embroilment. Reversed: Enforced gaiety, simulated enjoyment, literal sense, handwriting, composition, letters of exchange.', '56_pktpeac.jpg': 'Perfect contentment, felicity, ecstasy; also speedy intelligence; gold. Reversed: The evil side of wealth, bad intelligence; also great riches. In any case it shews prosperity, comfortable material conditions, but whether these are of advantage to the possessor will depend on whether the card is reversed or not.'}
 
 #sqlite3
 #sqlite3 list tables in base
@@ -178,25 +70,44 @@ def sql_drop(con):
     cursorObj.execute('DROP table if exists rooms_room')
     print(cursorObj.fetchall())
 # insert table
-def sql_insert(con, card, card_meaning):
+def sql_insert(con,title, slug, updated_on, content, created_on, status):
     cursorObj = con.cursor()
-    sql = 'INSERT INTO cards_cards(card, card_meaning) VALUES(?,?)'
-    val = (card, card_meaning)
+    sql = 'INSERT INTO blog_note(title, slug, updated_on, content, created_on, status) VALUES(?,?,?,?,?,?)'
+    val = (title, slug, updated_on, content, created_on, status)
     cursorObj.execute(sql, val)
     con.commit()
 
 
 #sqlite3
-con = sqlite3.connect('E:/install/python/tarrot/db.sqlite3')
-#sql = 'SELECT name from sqlite_master where type= "table"' # name all tables
-#sql = ' SELECT ID FROM cards_cards'  # table structure
-key_cards_56_meaning = list(cards_56_meaning.keys())
-for i in range(0,56,1):
-    sql_insert(con, 'cards/'+key_cards_56_meaning[i],cards_name_56[i] +".-- " + cards_56_meaning[key_cards_56_meaning[i]])
-    #sql_insert(con, 'cards/'+cards_22[i],cards_name_meaning_22[i])
-    pass
+base_dir= os.path.dirname(os.path.realpath(__file__))
+con = sqlite3.connect(os.path.join(base_dir,'db.sqlite3'))
+#con = sqlite3.connect('E:/install/python/project_www/septima_vercel/db.sqlite3')
+sql = 'SELECT name from sqlite_master where type= "table"' # name all tables
+#sql = ' SELECT ID FROM auth_user'  # table structure
+sql_fetch(con, sql)
+con.close()
+
+#%%
+import pandas as pd
+import sqlite3
+
+base_dir= os.path.dirname(os.path.realpath(__file__))
+con = sqlite3.connect(os.path.join(base_dir,'db.sqlite3'))
+sql = 'SELECT * from cards_cards'
+
+df = pd.read_sql(sql, con)
+#df = df[['id', 'name_group', 'coefficient', 'image', 'description', 'status', 'author_id', 'image']]
+#df.to_csv('work.csv', index = False, header= True)
+
+print(df)
+
+for item in df[0:1]:
+    print(item)
+print("------------------")
+for item in df.index[0:2]:
+    print(df.loc[item])
+    #print('---------------------')
+
 
 
 con.close()
-
-

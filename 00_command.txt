@@ -11,7 +11,25 @@ pip install -r requirements.txt
 
 2. How to Start Django Project with a Database(PostgreSQL) https://stackpython.medium.com/how-to-start-django-project-with-a-database-postgresql-aaa1d74659d8
 
+2. Create venv
+python -m venv env
+deactivate
 
+f:\install\python\project_www\septima_vercel\env\Scripts\activate.bat 
+or 
+env\Scripts\activate.bat
+python manage.py shell
+
+3. install 
+python -m pip install --upgrade pip
+pip install psycopg2-binary fastapi uvicorn sqlalchemy Django Pillow dj-database-url whitenoise
+python -m pip freeze > requirements.txt
+pip install -r requirements.txt
+
+python manage.py makemigrations
+python manage.py sqlmigrate blog 0007
+python manage.py migrate
+python manage.py runserver
 
 3. Deploy to vercel https://www.devmaesters.com/blog/15
 

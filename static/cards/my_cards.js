@@ -20,7 +20,7 @@ function shuffle_cards() {
                 document.getElementById("message").innerHTML = "Finish the case. Select three cards";
                 break;
               case 3:
-                document.getElementById("shuffle_cards").innerHTML = "Please enough ...";
+                document.getElementById("shuffle_cards").innerHTML = "ДОСТАТНЬО (Please enough) ...";
                 break;
               default:
             }
@@ -44,7 +44,7 @@ function shuffle_cards() {
             var foo = document.getElementById("display");
             foo.appendChild(img);
         }
-        document.getElementById("message").innerHTML = "Сome up with a question and Select three cards<br><small>Придумайте запитання та виберіть три картки</small>";
+        document.getElementById("message").innerHTML = "Придумайте запитання та виберіть три картки<br><small>Сome up with a question and Select three cards</small>";
     }
 }
 
